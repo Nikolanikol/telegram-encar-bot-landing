@@ -1,0 +1,2302 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Car Analyzer — Проверь корейский автомобиль до покупки</title>
+<meta name="description" content="Car Analyzer: полный отчёт по страховой истории, ДТП и техосмотру корейских авто за 10 секунд в Telegram">
+
+<!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%231E88E5'/%3E%3Cpath d='M10 8h8l4 4v12a1 1 0 01-1 1H10a1 1 0 01-1-1V9a1 1 0 011-1z' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3Cpath d='M18 8v4h4' fill='none' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='12' y1='16' x2='20' y2='16' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3Cline x1='12' y1='19' x2='20' y2='19' stroke='white' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="canonical" href="https://kmotors.shop">
+
+<!-- Preload hero image -->
+<link rel="preload" as="image" href="hero-bg.jpg">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Car Analyzer">
+<meta property="og:url" content="https://kmotors.shop">
+<meta property="og:title" content="Car Analyzer — Проверь корейский автомобиль до покупки">
+<meta property="og:description" content="Полный отчёт по страховой истории, ДТП и техосмотру корейских авто — прямо в Telegram за 10 секунд. 10 проверок бесплатно.">
+<meta property="og:image" content="https://kmotors.shop/hero-bg.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ru_RU">
+
+<!-- Twitter Card -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Car Analyzer — Проверь корейский автомобиль до покупки">
+<meta name="twitter:description" content="Полный отчёт по страховой истории, ДТП и техосмотру корейских авто — прямо в Telegram за 10 секунд. 10 проверок бесплатно.">
+<meta name="twitter:image" content="https://kmotors.shop/hero-bg.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+/* ===== CSS RESET & VARIABLES ===== */
+:root {
+  --bg-primary: #0A0A0A;
+  --bg-secondary: #111111;
+  --bg-tertiary: #1A1A1A;
+  --text-primary: #F5F5F5;
+  --text-secondary: #9CA3AF;
+  --text-muted: #6B7280;
+  --accent-blue: #1E88E5;
+  --accent-blue-glow: rgba(30, 136, 229, 0.3);
+  --accent-orange: #FF6D00;
+  --accent-orange-glow: rgba(255, 109, 0, 0.3);
+  --border-color: #2A2A2A;
+  --border-hover: #3A3A3A;
+  --success: #10B981;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.3s ease;
+  --transition-slow: 0.5s ease;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--border-color); border-radius: 4px; }
+::-webkit-scrollbar-thumb:hover { background: var(--accent-blue); }
+
+/* ===== NOISE OVERLAY ===== */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0.025;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(40px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(60px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes typewriter {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px var(--accent-blue-glow); }
+  50% { box-shadow: 0 0 40px var(--accent-blue-glow), 0 0 60px rgba(30, 136, 229, 0.15); }
+}
+
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== UTILITY CLASSES ===== */
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section {
+  position: relative;
+  padding: 100px 0;
+}
+
+.section-title {
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+  line-height: 1.15;
+}
+
+.section-subtitle {
+  font-size: 18px;
+  color: var(--text-secondary);
+  max-width: 600px;
+  margin-bottom: 60px;
+}
+
+/* ===== BUTTONS ===== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 16px 36px;
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all var(--transition-base);
+  text-decoration: none;
+  border: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.5s ease;
+}
+
+.btn:hover::before {
+  transform: translateX(100%);
+}
+
+.btn-primary {
+  background: var(--accent-blue);
+  color: white;
+  box-shadow: 0 0 25px var(--accent-blue-glow);
+}
+
+.btn-primary:hover {
+  background: #2196F3;
+  box-shadow: 0 0 40px var(--accent-blue-glow);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--text-primary);
+  border: 1.5px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+  transform: translateY(-2px);
+}
+
+.btn-orange {
+  background: var(--accent-orange);
+  color: white;
+  box-shadow: 0 0 25px var(--accent-orange-glow);
+}
+
+.btn-orange:hover {
+  background: #FF8124;
+  box-shadow: 0 0 40px var(--accent-orange-glow);
+  transform: translateY(-2px);
+}
+
+/* ===== HEADER ===== */
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: 20px 0;
+  transition: all var(--transition-base);
+  border-bottom: 1px solid transparent;
+}
+
+.header.scrolled {
+  background: rgba(10, 10, 10, 0.9);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom-color: var(--border-color);
+  padding: 14px 0;
+}
+
+.header .container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  letter-spacing: -0.02em;
+}
+
+.logo-icon {
+  width: 36px;
+  height: 36px;
+  background: var(--accent-blue);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+}
+
+.nav-desktop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.nav-desktop a {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 8px 16px;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.nav-desktop a:hover {
+  color: var(--text-primary);
+  background: var(--bg-tertiary);
+}
+
+.nav-cta {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.nav-cta .btn {
+  padding: 12px 24px;
+  font-size: 13px;
+}
+
+.mobile-menu-btn {
+  display: none;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 8px;
+}
+
+/* ===== HERO ===== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  padding: 120px 0 80px;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(10,10,10,0.95) 0%, rgba(10,10,10,0.7) 50%, rgba(10,10,10,0.95) 100%),
+              url('hero-bg.jpg') center/cover no-repeat;
+  z-index: 0;
+}
+
+.hero-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-image: 
+    linear-gradient(rgba(30, 136, 229, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(30, 136, 229, 0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+  -webkit-mask-image: radial-gradient(ellipse at center, black 0%, transparent 70%);
+}
+
+.hero-scanline {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.hero-scanline::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+  opacity: 0.3;
+  animation: scanline 4s linear infinite;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+  max-width: 800px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: 100px;
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--accent-blue);
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards 0.2s;
+}
+
+.hero-badge .dot {
+  width: 6px;
+  height: 6px;
+  background: var(--accent-blue);
+  border-radius: 50%;
+  animation: pulse 2s ease infinite;
+}
+
+.hero-title {
+  font-family: var(--font-heading);
+  font-size: clamp(32px, 5vw, 64px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards 0.4s;
+}
+
+.hero-title .accent {
+  color: var(--accent-blue);
+}
+
+.hero-subtitle {
+  font-size: clamp(16px, 2vw, 20px);
+  color: var(--text-secondary);
+  max-width: 560px;
+  margin: 0 auto 40px;
+  line-height: 1.7;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards 0.6s;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards 0.8s;
+}
+
+.hero-cta .btn {
+  padding: 18px 40px;
+  font-size: 16px;
+}
+
+.hero-stats {
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  margin-top: 80px;
+  padding-top: 40px;
+  border-top: 1px solid var(--border-color);
+  opacity: 0;
+  animation: fadeInUp 0.6s ease forwards 1s;
+}
+
+.hero-stat {
+  text-align: center;
+}
+
+.hero-stat-value {
+  font-family: var(--font-heading);
+  font-size: 36px;
+  font-weight: 700;
+  color: var(--accent-blue);
+  display: block;
+}
+
+.hero-stat-label {
+  font-size: 13px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
+}
+
+/* ===== HOW IT WORKS ===== */
+.steps {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+}
+
+.step-card {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 48px 32px;
+  text-align: center;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.step-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--accent-blue), transparent);
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.step-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-4px);
+}
+
+.step-card:hover::before {
+  opacity: 1;
+}
+
+.step-number {
+  font-family: var(--font-heading);
+  font-size: 72px;
+  font-weight: 700;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--border-hover);
+  line-height: 1;
+  margin-bottom: 24px;
+  transition: all var(--transition-base);
+}
+
+.step-card:hover .step-number {
+  -webkit-text-stroke-color: var(--accent-blue);
+}
+
+.step-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--bg-primary);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-color);
+}
+
+.step-icon img {
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+}
+
+.step-title {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.step-desc {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+.step-arrow {
+  position: absolute;
+  right: -30px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 20px;
+  color: var(--border-hover);
+  z-index: 10;
+}
+
+/* ===== FEATURES ===== */
+.features {
+  background: var(--bg-primary);
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.feature-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 36px;
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  transition: all var(--transition-base);
+}
+
+.feature-card:hover {
+  border-color: var(--accent-blue);
+  background: var(--bg-tertiary);
+  transform: translateY(-2px);
+}
+
+.feature-icon {
+  width: 48px;
+  height: 48px;
+  min-width: 48px;
+  background: rgba(30, 136, 229, 0.1);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+}
+
+.feature-content h3 {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.feature-content p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ===== EXAMPLE REPORT ===== */
+.example {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.example-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  align-items: start;
+}
+
+.example-visual {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 40px;
+  position: relative;
+  overflow: hidden;
+}
+
+.example-visual::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 50%, rgba(30, 136, 229, 0.05), transparent 70%);
+  pointer-events: none;
+}
+
+.example-car-name {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.example-car-model {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-bottom: 32px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.example-car-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.example-stat {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  padding: 16px;
+}
+
+.example-stat-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 4px;
+}
+
+.example-stat-value {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.example-table-wrapper {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.example-table-header {
+  padding: 20px 24px;
+  background: var(--bg-primary);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.example-table-header h4 {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.example-status-badge {
+  padding: 4px 12px;
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.example-table {
+  width: 100%;
+}
+
+.example-table-row {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  gap: 16px;
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 14px;
+  transition: background var(--transition-fast);
+}
+
+.example-table-row:last-child {
+  border-bottom: none;
+}
+
+.example-table-row:hover {
+  background: rgba(30, 136, 229, 0.05);
+}
+
+.example-table-row .event {
+  color: var(--text-primary);
+}
+
+.example-table-row .date {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
+.example-table-row .status {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 100px;
+}
+
+.status-repaired {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+}
+
+.status-damage {
+  background: rgba(255, 109, 0, 0.1);
+  color: var(--accent-orange);
+}
+
+.example-car-badge {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 4px;
+}
+
+.example-section-label {
+  font-family: var(--font-heading);
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin: 24px 0 12px;
+}
+
+.example-data-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.example-data-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 9px 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 14px;
+  gap: 12px;
+}
+
+.example-data-row:last-child {
+  border-bottom: none;
+}
+
+.example-data-key {
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.example-data-val {
+  font-weight: 500;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.example-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.example-insurance {
+  padding: 8px 24px 16px;
+}
+
+.example-insurance-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 8px 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.example-insurance-row:last-of-type {
+  border-bottom: none;
+}
+
+.example-insurance-meta {
+  font-size: 12px;
+  color: var(--text-muted);
+  padding-top: 10px;
+}
+
+.example-status-warn {
+  background: rgba(255, 109, 0, 0.1);
+  color: var(--accent-orange);
+}
+
+.example-row-tech {
+  grid-template-columns: auto 1fr auto !important;
+}
+
+/* ===== PLATFORMS ===== */
+.platforms {
+  background: var(--bg-primary);
+}
+
+.platforms-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.platform-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 48px 32px;
+  text-align: center;
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+.platform-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+
+.platform-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-hover);
+}
+
+a.platform-card {
+  text-decoration: none;
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.platform-card.encar::before {
+  background: radial-gradient(circle at 50% 0%, rgba(239, 68, 68, 0.08), transparent 70%);
+}
+
+.platform-card.kb::before {
+  background: radial-gradient(circle at 50% 0%, rgba(30, 136, 229, 0.08), transparent 70%);
+}
+
+.platform-card.kcar::before {
+  background: radial-gradient(circle at 50% 0%, rgba(16, 185, 129, 0.08), transparent 70%);
+}
+
+.platform-card:hover::before {
+  opacity: 1;
+}
+
+.platform-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.platform-logo {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 24px;
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.platform-card.encar .platform-logo {
+  background: rgba(239, 68, 68, 0.1);
+  color: #EF4444;
+  border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.platform-card.kb .platform-logo {
+  background: rgba(30, 136, 229, 0.1);
+  color: var(--accent-blue);
+  border: 1px solid rgba(30, 136, 229, 0.2);
+}
+
+.platform-card.kcar .platform-logo {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--success);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+.platform-name {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.platform-desc {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* ===== PRICING ===== */
+.pricing {
+  background: var(--bg-secondary);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.pricing-tabs {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 48px;
+  background: var(--bg-tertiary);
+  padding: 6px;
+  border-radius: var(--radius-md);
+  width: fit-content;
+}
+
+.pricing-tab {
+  padding: 12px 28px;
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+}
+
+.pricing-tab.active {
+  background: var(--accent-blue);
+  color: white;
+}
+
+.pricing-tab:hover:not(.active) {
+  color: var(--text-primary);
+  background: var(--bg-primary);
+}
+
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.pricing-grid.b2b {
+  display: none;
+}
+
+.pricing-grid.b2b.active {
+  display: grid;
+}
+
+.pricing-grid.individual {
+  display: none;
+}
+
+.pricing-grid.individual.active {
+  display: grid;
+}
+
+.pricing-card {
+  background: var(--bg-tertiary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 36px 28px;
+  position: relative;
+  transition: all var(--transition-base);
+  display: flex;
+  flex-direction: column;
+}
+
+.pricing-card:hover {
+  border-color: var(--border-hover);
+  transform: translateY(-4px);
+}
+
+.pricing-card.popular {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 30px var(--accent-blue-glow);
+}
+
+.pricing-card.popular::before {
+  content: 'Популярный';
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 4px 16px;
+  background: var(--accent-blue);
+  color: white;
+  font-family: var(--font-heading);
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: 100px;
+}
+
+.pricing-card-name {
+  font-family: var(--font-heading);
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.pricing-card-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+.pricing-card-price {
+  font-family: var(--font-heading);
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  line-height: 1;
+}
+
+.pricing-card-price span {
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.pricing-card-period {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+}
+
+.pricing-card-features {
+  list-style: none;
+  margin-bottom: 32px;
+  flex: 1;
+}
+
+.pricing-card-features li {
+  padding: 8px 0;
+  font-size: 14px;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border-color);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pricing-card-features li:last-child {
+  border-bottom: none;
+}
+
+.pricing-card-features li::before {
+  content: '';
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  background: rgba(16, 185, 129, 0.15);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 24 24' fill='none' stroke='%2310B981' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.pricing-card .btn {
+  width: 100%;
+  padding: 14px;
+  font-size: 14px;
+}
+
+/* ===== FAQ ===== */
+.faq {
+  background: var(--bg-primary);
+}
+
+.faq-list {
+  max-width: 800px;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.faq-item:first-child {
+  border-top: 1px solid var(--border-color);
+}
+
+.faq-question {
+  width: 100%;
+  padding: 28px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-primary);
+  text-align: left;
+}
+
+.faq-question-text {
+  font-family: var(--font-heading);
+  font-size: 17px;
+  font-weight: 500;
+  padding-right: 20px;
+}
+
+.faq-icon {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  border: 1.5px solid var(--border-color);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-base);
+  position: relative;
+}
+
+.faq-icon::before,
+.faq-icon::after {
+  content: '';
+  position: absolute;
+  background: var(--text-secondary);
+  transition: all var(--transition-base);
+}
+
+.faq-icon::before {
+  width: 10px;
+  height: 1.5px;
+}
+
+.faq-icon::after {
+  width: 1.5px;
+  height: 10px;
+}
+
+.faq-item.open .faq-icon {
+  border-color: var(--accent-blue);
+  background: var(--accent-blue);
+}
+
+.faq-item.open .faq-icon::before,
+.faq-item.open .faq-icon::after {
+  background: white;
+}
+
+.faq-item.open .faq-icon::after {
+  transform: rotate(90deg);
+  opacity: 0;
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, padding 0.4s ease;
+}
+
+.faq-item.open .faq-answer {
+  max-height: 300px;
+  padding-bottom: 28px;
+}
+
+.faq-answer p {
+  font-size: 15px;
+  color: var(--text-secondary);
+  line-height: 1.7;
+  padding-left: 0;
+}
+
+/* ===== CTA / FOOTER ===== */
+.cta {
+  background: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+  border-top: 1px solid var(--border-color);
+  text-align: center;
+  padding: 100px 0;
+}
+
+.cta-content {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.cta-title {
+  font-family: var(--font-heading);
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+
+.cta-subtitle {
+  font-size: 18px;
+  color: var(--text-secondary);
+  margin-bottom: 40px;
+  line-height: 1.7;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 60px;
+}
+
+.cta-buttons .btn {
+  padding: 18px 40px;
+  font-size: 16px;
+}
+
+.footer {
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-color);
+  padding: 60px 0 40px;
+}
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px;
+  margin-bottom: 40px;
+}
+
+.footer-brand p {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 16px;
+  line-height: 1.7;
+  max-width: 300px;
+}
+
+.footer-title {
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-secondary);
+  margin-bottom: 20px;
+}
+
+.footer-links {
+  list-style: none;
+}
+
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  font-size: 14px;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+.footer-links a:hover {
+  color: var(--accent-blue);
+}
+
+.footer-bottom {
+  padding-top: 24px;
+  border-top: 1px solid var(--border-color);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.footer-copyright {
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.footer-social {
+  display: flex;
+  gap: 16px;
+}
+
+.footer-social a {
+  width: 36px;
+  height: 36px;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.footer-social a:hover {
+  border-color: var(--accent-blue);
+  color: var(--accent-blue);
+  background: rgba(30, 136, 229, 0.05);
+}
+
+/* ===== SCROLL REVEAL ===== */
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+
+.reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+
+/* ===== MOBILE MENU ===== */
+.mobile-menu {
+  position: fixed;
+  inset: 0;
+  z-index: 2000;
+  background: rgba(10, 10, 10, 0.98);
+  backdrop-filter: blur(20px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+
+.mobile-menu.open {
+  opacity: 1;
+  pointer-events: all;
+}
+
+.mobile-menu a {
+  font-family: var(--font-heading);
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color var(--transition-fast);
+}
+
+.mobile-menu a:hover {
+  color: var(--accent-blue);
+}
+
+.mobile-menu-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  background: none;
+  border: none;
+  color: var(--text-primary);
+  cursor: pointer;
+  padding: 8px;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .pricing-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .section {
+    padding: 60px 0;
+  }
+  .section-title {
+    font-size: 28px;
+  }
+  .nav-desktop {
+    display: none;
+  }
+  .mobile-menu-btn {
+    display: block;
+  }
+  .hero-stats {
+    gap: 30px;
+  }
+  .hero-stat-value {
+    font-size: 28px;
+  }
+  .steps-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .step-arrow {
+    display: none;
+  }
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  .example-container {
+    grid-template-columns: 1fr;
+  }
+  .platforms-grid {
+    grid-template-columns: 1fr;
+  }
+  .pricing-grid {
+    grid-template-columns: 1fr;
+  }
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero-cta {
+    flex-direction: column;
+    align-items: center;
+  }
+  .hero-cta .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+  .cta-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+  .cta-buttons .btn {
+    width: 100%;
+    max-width: 300px;
+  }
+  .hero-stats {
+    flex-direction: column;
+    gap: 24px;
+  }
+}
+
+/* ===== CUSTOM CURSOR (desktop only) ===== */
+@media (pointer: fine) {
+  .cursor-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--accent-blue);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    transition: transform 0.1s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-outline {
+    width: 32px;
+    height: 32px;
+    border: 1.5px solid var(--accent-blue);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 10000;
+    transition: transform 0.15s ease, width 0.3s ease, height 0.3s ease;
+    opacity: 0.5;
+  }
+  body:hover .cursor-outline {
+    opacity: 1;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-outline" id="cursorOutline"></div>
+
+<!-- Header -->
+<header class="header" id="header">
+  <div class="container">
+    <a href="#" class="logo">
+      <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+        </svg>
+      </div>
+      Car Analyzer
+    </a>
+    <nav class="nav-desktop">
+      <a href="#how-it-works">Как работает</a>
+      <a href="#features">Возможности</a>
+      <a href="#platforms">Платформы</a>
+      <a href="#pricing">Тарифы</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+    <div class="nav-cta">
+      <a href="https://t.me/koreancarss_bot" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Открыть в Telegram</a>
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <button class="mobile-menu-close" id="mobileMenuClose" aria-label="Close menu">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+      <line x1="18" y1="6" x2="6" y2="18"/>
+      <line x1="6" y1="6" x2="18" y2="18"/>
+    </svg>
+  </button>
+  <a href="#how-it-works" class="mobile-nav-link">Как работает</a>
+  <a href="#features" class="mobile-nav-link">Возможности</a>
+  <a href="#platforms" class="mobile-nav-link">Платформы</a>
+  <a href="#pricing" class="mobile-nav-link">Тарифы</a>
+  <a href="#faq" class="mobile-nav-link">FAQ</a>
+  <a href="https://t.me/koreancarss_bot" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="margin-top: 20px;">Открыть в Telegram</a>
+</div>
+
+<!-- Hero Section -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-scanline"></div>
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Telegram-бот для проверки авто из Кореи
+      </div>
+      <h1 class="hero-title">
+        Проверь корейский<br>автомобиль <span class="accent">до покупки</span>
+      </h1>
+      <p class="hero-subtitle">
+        Полный отчёт по страховой истории, ДТП и техосмотру — прямо в Telegram за 10 секунд
+      </p>
+      <div class="hero-cta">
+        <a href="https://t.me/koreancarss_bot" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+          </svg>
+          Попробовать бесплатно
+        </a>
+        <a href="#how-it-works" class="btn btn-secondary">Узнать больше</a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="hero-stat-value">10 000+</span>
+          <span class="hero-stat-label">Проверок</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-value">3</span>
+          <span class="hero-stat-label">Платформы</span>
+        </div>
+        <div class="hero-stat">
+          <span class="hero-stat-value">10 сек</span>
+          <span class="hero-stat-label">На отчёт</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="section steps" id="how-it-works">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="section-title">Как это работает</h2>
+      <p class="section-subtitle">Три простых шага до полного отчёта об автомобиле</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card reveal reveal-delay-1">
+        <div class="step-number">01</div>
+        <div class="step-icon">
+          <img src="icon-search.png" alt="Поиск" loading="lazy">
+        </div>
+        <h3 class="step-title">Найди автомобиль</h3>
+        <p class="step-desc">Выбери подходящий автомобиль на одной из площадок: Encar, KBChachacha или Kcar</p>
+        <svg class="step-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </div>
+      <div class="step-card reveal reveal-delay-2">
+        <div class="step-number">02</div>
+        <div class="step-icon">
+          <img src="icon-link.png" alt="Ссылка" loading="lazy">
+        </div>
+        <h3 class="step-title">Скопируй ссылку</h3>
+        <p class="step-desc">Скопируй ссылку на объявление и отправь её боту в Telegram</p>
+        <svg class="step-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <polyline points="9 18 15 12 9 6"/>
+        </svg>
+      </div>
+      <div class="step-card reveal reveal-delay-3">
+        <div class="step-number">03</div>
+        <div class="step-icon">
+          <img src="icon-report.png" alt="Отчёт" loading="lazy">
+        </div>
+        <h3 class="step-title">Получи отчёт</h3>
+        <p class="step-desc">Бот мгновенно сформирует полный отчёт на русском языке</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="section features" id="features">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="section-title">Что вы получаете</h2>
+      <p class="section-subtitle">Детальная информация о состоянии автомобиля из всех доступных источников</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon">⚠️</div>
+        <div class="feature-content">
+          <h3>История страховых случаев и ДТП</h3>
+          <p>Полная информация обо всех зарегистрированных авариях, страховых выплатах и ущербе</p>
+        </div>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon">🔧</div>
+        <div class="feature-content">
+          <h3>Данные технического осмотра</h3>
+          <p>Результаты техосмотра, выявленные неисправности и рекомендации по ремонту</p>
+        </div>
+      </div>
+      <div class="feature-card reveal reveal-delay-3">
+        <div class="feature-icon">📊</div>
+        <div class="feature-content">
+          <h3>Пробег, год выпуска, комплектация</h3>
+          <p>Точные технические характеристики и фактический пробег автомобиля</p>
+        </div>
+      </div>
+      <div class="feature-card reveal reveal-delay-4">
+        <div class="feature-icon">👤</div>
+        <div class="feature-content">
+          <h3>Информация о предыдущих владельцах</h3>
+          <p>Количество владельцев, сроки владения и типы использования</p>
+        </div>
+      </div>
+      <div class="feature-card reveal reveal-delay-1" style="grid-column: 1 / -1;">
+        <div class="feature-icon" style="background: rgba(30, 136, 229, 0.15); font-size: 20px;">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--accent-blue)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+            <line x1="8" y1="21" x2="16" y2="21"/>
+            <line x1="12" y1="17" x2="12" y2="21"/>
+          </svg>
+        </div>
+        <div class="feature-content">
+          <h3>Поддержка трёх платформ: Encar, KBChachacha, Kcar</h3>
+          <p>Работаем со всеми крупнейшими корейскими площадками подержанных автомобилей. Достаточно отправить ссылку на любую из них.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Example Report Section -->
+<section class="section example" id="example">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="section-title">Пример отчёта</h2>
+      <p class="section-subtitle">Так выглядит полный отчёт, который вы получите после проверки</p>
+    </div>
+    <div class="example-container">
+
+      <!-- Основные данные -->
+      <div class="example-visual reveal reveal-delay-1">
+        <div class="example-car-badge">
+          <span>🚗</span>
+          <span class="example-car-name">Kia Ray</span>
+        </div>
+        <div class="example-car-model">Делюкс Спешел · Encar.com</div>
+        <div class="example-section-label">📋 Основные данные</div>
+        <div class="example-data-list">
+          <div class="example-data-row">
+            <span class="example-data-key">VIN</span>
+            <span class="example-data-val">KNACH811BDT050022</span>
+          </div>
+          <div class="example-data-row">
+            <span class="example-data-key">Год выпуска</span>
+            <span class="example-data-val">2013</span>
+          </div>
+          <div class="example-data-row">
+            <span class="example-data-key">Пробег</span>
+            <span class="example-data-val">93 801 км</span>
+          </div>
+          <div class="example-data-row">
+            <span class="example-data-key">Цена</span>
+            <span class="example-data-val">5 390 000 ₩</span>
+          </div>
+          <div class="example-data-row">
+            <span class="example-data-key">КПП</span>
+            <span class="example-data-val">Автомат</span>
+          </div>
+          <div class="example-data-row">
+            <span class="example-data-key">Топливо</span>
+            <span class="example-data-val">Бензин</span>
+          </div>
+          <div class="example-data-row">
+            <span class="example-data-key">Двигатель</span>
+            <span class="example-data-val">1.0л</span>
+          </div>
+          <div class="example-data-row">
+            <span class="example-data-key">Цвет</span>
+            <span class="example-data-val">Голубой</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Страховая история + Техинспекция -->
+      <div class="example-right reveal reveal-delay-2">
+
+        <div class="example-table-wrapper">
+          <div class="example-table-header">
+            <h4>🔍 Страховая история</h4>
+            <span class="example-status-badge example-status-warn">Есть аварии</span>
+          </div>
+          <div class="example-insurance">
+            <div class="example-insurance-row">
+              <span>⚠️</span>
+              <span>Аварий (виновник): <strong>2</strong> — 5 140 820 ₩</span>
+            </div>
+            <div class="example-insurance-row">
+              <span>⚠️</span>
+              <span>Аварий (пострадавший): <strong>1</strong> — 360 598 ₩</span>
+            </div>
+            <div class="example-insurance-meta">Первая регистрация: 18.01.2013</div>
+          </div>
+        </div>
+
+        <div class="example-table-wrapper">
+          <div class="example-table-header">
+            <h4>🔧 Техническая инспекция</h4>
+            <span class="example-status-badge">Узлы: ✅ Норма</span>
+          </div>
+          <div class="example-table">
+            <div class="example-table-row example-row-tech">
+              <span>🔴</span>
+              <span class="event">Переднее крыло (пр.)</span>
+              <span class="status status-damage">Замена</span>
+            </div>
+            <div class="example-table-row example-row-tech">
+              <span>🔴</span>
+              <span class="event">Капот</span>
+              <span class="status status-damage">Замена</span>
+            </div>
+            <div class="example-table-row example-row-tech">
+              <span>🔴</span>
+              <span class="event">Крышка багажника</span>
+              <span class="status status-damage">Замена</span>
+            </div>
+            <div class="example-table-row example-row-tech">
+              <span>⚠️</span>
+              <span class="event">Порог панель (лев.)</span>
+              <span class="status status-damage">Рихтовка/сварка</span>
+            </div>
+            <div class="example-table-row example-row-tech">
+              <span>⚠️</span>
+              <span class="event">Задняя панель</span>
+              <span class="status status-damage">Замена</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing Section -->
+<section class="section pricing" id="pricing">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="section-title">Тарифы</h2>
+      <p class="section-subtitle">Выберите подходящий пакет для проверки автомобилей</p>
+    </div>
+    <div class="pricing-tabs reveal">
+      <button class="pricing-tab active" data-tab="individual">Частные лица</button>
+      <button class="pricing-tab" data-tab="b2b">Бизнес</button>
+    </div>
+    <div class="pricing-grid individual active" id="pricing-individual">
+      <div class="pricing-card reveal reveal-delay-1">
+        <div class="pricing-card-name">Пробный</div>
+        <div class="pricing-card-desc">Для знакомства с сервисом</div>
+        <div class="pricing-card-price">Бесплатно</div>
+        <div class="pricing-card-period">10 запросов</div>
+        <ul class="pricing-card-features">
+          <li>Проверка по VIN-номеру</li>
+          <li>Базовый отчёт</li>
+          <li>История ДТП</li>
+          <li>Поддержка 3 площадок</li>
+        </ul>
+        <a href="https://t.me/koreancarss_bot" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Начать</a>
+      </div>
+      <div class="pricing-card reveal reveal-delay-2">
+        <div class="pricing-card-name">Базовый</div>
+        <div class="pricing-card-desc">Для разовой проверки</div>
+        <div class="pricing-card-price">$5 <span>USD</span></div>
+        <div class="pricing-card-period">30 запросов</div>
+        <ul class="pricing-card-features">
+          <li>Всё из пробного</li>
+          <li>Полный отчёт</li>
+          <li>Техосмотр</li>
+          <li>История владельцев</li>
+        </ul>
+        <a href="https://t.me/koreancarss_bot" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Купить</a>
+      </div>
+      <div class="pricing-card popular reveal reveal-delay-3">
+        <div class="pricing-card-name">Стандарт</div>
+        <div class="pricing-card-desc">Для активных покупателей</div>
+        <div class="pricing-card-price">$9 <span>USD</span></div>
+        <div class="pricing-card-period">70 запросов</div>
+        <ul class="pricing-card-features">
+          <li>Всё из базового</li>
+          <li>Приоритетная обработка</li>
+          <li>Экспорт отчётов PDF</li>
+          <li>Поддержка 24/7</li>
+        </ul>
+        <a href="https://t.me/koreancarss_bot" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Купить</a>
+      </div>
+      <div class="pricing-card reveal reveal-delay-4">
+        <div class="pricing-card-name">Расширенный</div>
+        <div class="pricing-card-desc">Для максимальной проверки</div>
+        <div class="pricing-card-price">$15 <span>USD</span></div>
+        <div class="pricing-card-period">150 запросов</div>
+        <ul class="pricing-card-features">
+          <li>Всё из стандартного</li>
+          <li>Расширенная аналитика</li>
+          <li>Сравнение автомобилей</li>
+          <li>Персональный менеджер</li>
+        </ul>
+        <a href="https://t.me/koreancarss_bot" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">Купить</a>
+      </div>
+    </div>
+    <div class="pricing-grid b2b" id="pricing-b2b">
+      <div class="pricing-card reveal reveal-delay-1">
+        <div class="pricing-card-name">Дилер</div>
+        <div class="pricing-card-desc">Для автодилеров</div>
+        <div class="pricing-card-price">$39 <span>/мес</span></div>
+        <div class="pricing-card-period">Безлимитные запросы</div>
+        <ul class="pricing-card-features">
+          <li>Безлимитные запросы</li>
+          <li>1 пользователь</li>
+          <li>Полные отчёты</li>
+          <li>Приоритетная поддержка</li>
+        </ul>
+        <a href="https://t.me/koreancarss_bot" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Подключить</a>
+      </div>
+      <div class="pricing-card popular reveal reveal-delay-2">
+        <div class="pricing-card-name">Агентство</div>
+        <div class="pricing-card-desc">Для агентств по подбору</div>
+        <div class="pricing-card-price">$79 <span>/мес</span></div>
+        <div class="pricing-card-period">Безлимит, до 5 пользователей</div>
+        <ul class="pricing-card-features">
+          <li>Всё из тарифа Дилер</li>
+          <li>До 5 пользователей</li>
+          <li>Командная статистика</li>
+          <li>API-доступ</li>
+        </ul>
+        <a href="https://t.me/koreancarss_bot" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Подключить</a>
+      </div>
+      <div class="pricing-card reveal reveal-delay-3" style="grid-column: span 2;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center;">
+          <div>
+            <div class="pricing-card-name">Корпоративный</div>
+            <div class="pricing-card-desc">Для крупных компаний</div>
+            <div class="pricing-card-price" style="font-size: 32px;">По запросу</div>
+            <div class="pricing-card-period">Безлимит, API, White Label</div>
+          </div>
+          <div>
+            <ul class="pricing-card-features" style="margin-bottom: 24px;">
+              <li>Всё из тарифа Агентство</li>
+              <li>Безлимит пользователей</li>
+              <li>Полный API-доступ</li>
+              <li>White Label решение</li>
+              <li>Персональный менеджер</li>
+              <li>SLA-гарантии</li>
+            </ul>
+            <a href="https://t.me/caparts" target="_blank" rel="noopener noreferrer" class="btn btn-orange">Связаться</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Platforms Section -->
+<section class="section platforms" id="platforms">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="section-title">Поддерживаемые площадки</h2>
+      <p class="section-subtitle">Работаем со всеми крупнейшими корейскими платформами подержанных автомобилей</p>
+    </div>
+    <div class="platforms-grid">
+      <a href="https://www.encar.com" target="_blank" rel="noopener noreferrer" class="platform-card encar reveal reveal-delay-1">
+        <div class="platform-logo">E</div>
+        <h3 class="platform-name">Encar.com</h3>
+        <p class="platform-desc">Крупнейшая площадка подержанных автомобилей в Корее. Более 200 000 объявлений.</p>
+      </a>
+      <a href="https://www.kbchachacha.com" target="_blank" rel="noopener noreferrer" class="platform-card kb reveal reveal-delay-2">
+        <div class="platform-logo">KB</div>
+        <h3 class="platform-name">KBChachacha.com</h3>
+        <p class="platform-desc">Платформа KB Capital с детальными отчётами и проверкой истории.</p>
+      </a>
+      <a href="https://www.kcar.com" target="_blank" rel="noopener noreferrer" class="platform-card kcar reveal reveal-delay-3">
+        <div class="platform-logo">K</div>
+        <h3 class="platform-name">Kcar.com</h3>
+        <p class="platform-desc">Официальная площадка KCar с гарантией пробега и состояния.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Section -->
+<section class="section faq" id="faq">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="section-title">Частые вопросы</h2>
+      <p class="section-subtitle">Ответы на популярные вопросы о работе сервиса</p>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item reveal reveal-delay-1">
+        <button class="faq-question">
+          <span class="faq-question-text">Как быстро приходит отчёт?</span>
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-answer">
+          <p>Отчёт формируется за 10–15 секунд после отправки ссылки боту. В редких случаях, когда требуется дополнительная проверка, время может составить до 1 минуты.</p>
+        </div>
+      </div>
+      <div class="faq-item reveal reveal-delay-2">
+        <button class="faq-question">
+          <span class="faq-question-text">Данные актуальные?</span>
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-answer">
+          <p>Да, запрос идёт напрямую к платформам Encar, KBChachacha и Kcar в реальном времени. Вы получаете самую свежую информацию, доступную на момент проверки.</p>
+        </div>
+      </div>
+      <div class="faq-item reveal reveal-delay-3">
+        <button class="faq-question">
+          <span class="faq-question-text">Как оплатить?</span>
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-answer">
+          <p>Напишите боту @koreancarss_bot или менеджеру @caparts в Telegram. Мы принимаем оплату в USD через различные платёжные системы. После оплаты пакет запросов активируется мгновенно.</p>
+        </div>
+      </div>
+      <div class="faq-item reveal reveal-delay-4">
+        <button class="faq-question">
+          <span class="faq-question-text">Есть ли пробный период?</span>
+          <span class="faq-icon"></span>
+        </button>
+        <div class="faq-answer">
+          <p>Да! Вы получаете 10 бесплатных запросов сразу после запуска бота. Это позволяет протестировать сервис и оценить качество отчётов перед покупкой платного пакета.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta" id="cta">
+  <div class="container">
+    <div class="cta-content reveal">
+      <h2 class="cta-title">Готовы проверить<br>свой автомобиль?</h2>
+      <p class="cta-subtitle">10 бесплатных запросов ждут вас. Начните прямо сейчас — это займёт меньше минуты.</p>
+      <div class="cta-buttons">
+        <a href="https://t.me/koreancarss_bot" target="_blank" rel="noopener noreferrer" class="btn btn-primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+          </svg>
+          Начать бесплатно
+        </a>
+        <a href="#how-it-works" class="btn btn-secondary">Узнать больше</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="#" class="logo">
+          <div class="logo-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <polyline points="14 2 14 8 20 8"/>
+              <line x1="16" y1="13" x2="8" y2="13"/>
+              <line x1="16" y1="17" x2="8" y2="17"/>
+            </svg>
+          </div>
+          Car Analyzer
+        </a>
+        <p>Профессиональный сервис проверки корейских автомобилей. Полные отчёты за 10 секунд.</p>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-title">Навигация</h4>
+        <ul class="footer-links">
+          <li><a href="#how-it-works">Как работает</a></li>
+          <li><a href="#features">Возможности</a></li>
+          <li><a href="#pricing">Тарифы</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-title">Платформы</h4>
+        <ul class="footer-links">
+          <li><a href="https://www.encar.com" target="_blank" rel="noopener noreferrer">Encar.com</a></li>
+          <li><a href="https://www.kbchachacha.com" target="_blank" rel="noopener noreferrer">KBChachacha.com</a></li>
+          <li><a href="https://www.kcar.com" target="_blank" rel="noopener noreferrer">Kcar.com</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-title">Контакты</h4>
+        <ul class="footer-links">
+          <li><a href="https://t.me/caparts" target="_blank" rel="noopener noreferrer">Telegram: @caparts</a></li>
+          <li><a href="https://kmotors.shop" target="_blank" rel="noopener noreferrer">kmotors.shop</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span class="footer-copyright">© 2025 Car Analyzer. Все права защищены.</span>
+      <div class="footer-social">
+        <a href="https://t.me/caparts" target="_blank" rel="noopener noreferrer" aria-label="Telegram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+          </svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ===== SCROLL REVEAL =====
+const revealElements = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+revealElements.forEach(el => revealObserver.observe(el));
+
+// ===== HEADER SCROLL EFFECT =====
+const header = document.getElementById('header');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 50) {
+    header.classList.add('scrolled');
+  } else {
+    header.classList.remove('scrolled');
+  }
+});
+
+// ===== MOBILE MENU =====
+const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+const mobileMenuClose = document.getElementById('mobileMenuClose');
+const mobileMenu = document.getElementById('mobileMenu');
+const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+function openMobileMenu() {
+  mobileMenu.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeMobileMenu() {
+  mobileMenu.classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+mobileMenuBtn.addEventListener('click', openMobileMenu);
+mobileMenuClose.addEventListener('click', closeMobileMenu);
+mobileNavLinks.forEach(link => link.addEventListener('click', closeMobileMenu));
+
+// ===== PRICING TABS =====
+const pricingTabs = document.querySelectorAll('.pricing-tab');
+const pricingIndividual = document.getElementById('pricing-individual');
+const pricingB2b = document.getElementById('pricing-b2b');
+
+pricingTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    pricingTabs.forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+    
+    if (tab.dataset.tab === 'individual') {
+      pricingIndividual.classList.add('active');
+      pricingB2b.classList.remove('active');
+    } else {
+      pricingIndividual.classList.remove('active');
+      pricingB2b.classList.add('active');
+    }
+  });
+});
+
+// ===== FAQ ACCORDION =====
+const faqItems = document.querySelectorAll('.faq-item');
+
+faqItems.forEach(item => {
+  const question = item.querySelector('.faq-question');
+  question.addEventListener('click', () => {
+    const isOpen = item.classList.contains('open');
+    faqItems.forEach(i => i.classList.remove('open'));
+    if (!isOpen) {
+      item.classList.add('open');
+    }
+  });
+});
+
+// ===== CUSTOM CURSOR =====
+const cursorDot = document.getElementById('cursorDot');
+const cursorOutline = document.getElementById('cursorOutline');
+
+if (window.matchMedia('(pointer: fine)').matches) {
+  let mouseX = 0, mouseY = 0;
+  let outlineX = 0, outlineY = 0;
+  
+  document.addEventListener('mousemove', (e) => {
+    mouseX = e.clientX;
+    mouseY = e.clientY;
+    cursorDot.style.left = mouseX - 4 + 'px';
+    cursorDot.style.top = mouseY - 4 + 'px';
+  });
+  
+  function animateCursor() {
+    outlineX += (mouseX - outlineX) * 0.15;
+    outlineY += (mouseY - outlineY) * 0.15;
+    cursorOutline.style.left = outlineX - 16 + 'px';
+    cursorOutline.style.top = outlineY - 16 + 'px';
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
+  
+  // Magnetic button effect
+  const buttons = document.querySelectorAll('.btn, .faq-question, .pricing-tab');
+  buttons.forEach(btn => {
+    btn.addEventListener('mouseenter', () => {
+      cursorOutline.style.width = '48px';
+      cursorOutline.style.height = '48px';
+      cursorOutline.style.borderColor = 'var(--accent-blue)';
+    });
+    btn.addEventListener('mouseleave', () => {
+      cursorOutline.style.width = '32px';
+      cursorOutline.style.height = '32px';
+      cursorOutline.style.borderColor = 'var(--accent-blue)';
+    });
+  });
+}
+
+// ===== SMOOTH SCROLL FOR ANCHOR LINKS =====
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
