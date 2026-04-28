@@ -11,7 +11,7 @@
 <link rel="canonical" href="https://kmotors.shop">
 
 <!-- Preload hero image -->
-<link rel="preload" as="image" href="hero-bg.jpg">
+<link rel="preload" as="image" href="hero-bg.jpg" fetchpriority="high">
 
 <!-- Open Graph -->
 <meta property="og:type" content="website">
@@ -30,9 +30,117 @@
 <meta name="twitter:description" content="Полный отчёт по страховой истории, ДТП и техосмотру корейских авто — прямо в Telegram за 10 секунд. 10 проверок бесплатно.">
 <meta name="twitter:image" content="https://kmotors.shop/hero-bg.jpg">
 
+<!-- Yandex.Metrika counter -->
+<script type="text/javascript">
+    (function(m,e,t,r,i,k,a){
+        m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+        m[i].l=1*new Date();
+        for (var j = 0; j < document.scripts.length; j++) {if (document.scripts[j].src === r) { return; }}
+        k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+    })(window, document,'script','https://mc.yandex.ru/metrika/tag.js?id=108825981', 'ym');
+
+    ym(108825981, 'init', {ssr:true, webvisor:true, clickmap:true, ecommerce:"dataLayer", referrer: document.referrer, url: location.href, accurateTrackBounce:true, trackLinks:true});
+</script>
+<noscript><div><img src="https://mc.yandex.ru/watch/108825981" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<!-- /Yandex.Metrika counter -->
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-RXCSFL9TY7"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-RXCSFL9TY7');
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<!-- JSON-LD Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "Car Analyzer",
+      "url": "https://kmotors.shop",
+      "description": "Telegram-бот для проверки корейских автомобилей. Полный отчёт по страховой истории, ДТП и техосмотру за 10 секунд.",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Telegram",
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Пробный",
+          "price": "0",
+          "priceCurrency": "USD",
+          "description": "10 бесплатных запросов"
+        },
+        {
+          "@type": "Offer",
+          "name": "Базовый",
+          "price": "5",
+          "priceCurrency": "USD",
+          "description": "30 запросов"
+        },
+        {
+          "@type": "Offer",
+          "name": "Стандарт",
+          "price": "9",
+          "priceCurrency": "USD",
+          "description": "70 запросов"
+        },
+        {
+          "@type": "Offer",
+          "name": "Расширенный",
+          "price": "15",
+          "priceCurrency": "USD",
+          "description": "150 запросов"
+        }
+      ],
+      "inLanguage": "ru"
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "Как быстро приходит отчёт?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Отчёт формируется за 10–15 секунд после отправки ссылки боту. В редких случаях, когда требуется дополнительная проверка, время может составить до 1 минуты."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Данные актуальные?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Да, запрос идёт напрямую к платформам Encar, KBChachacha и Kcar в реальном времени. Вы получаете самую свежую информацию, доступную на момент проверки."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Как оплатить?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Напишите боту @koreancarss_bot или менеджеру @caparts в Telegram. Мы принимаем оплату в USD через различные платёжные системы. После оплаты пакет запросов активируется мгновенно."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Есть ли пробный период?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Да! Вы получаете 10 бесплатных запросов сразу после запуска бота. Это позволяет протестировать сервис и оценить качество отчётов перед покупкой платного пакета."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
 
 <style>
 /* ===== CSS RESET & VARIABLES ===== */
@@ -1704,7 +1812,7 @@ a.platform-card {
       <div class="step-card reveal reveal-delay-1">
         <div class="step-number">01</div>
         <div class="step-icon">
-          <img src="icon-search.png" alt="Поиск" loading="lazy">
+          <img src="icon-search.png" alt="Найти автомобиль на корейской площадке" loading="lazy" width="32" height="32">
         </div>
         <h3 class="step-title">Найди автомобиль</h3>
         <p class="step-desc">Выбери подходящий автомобиль на одной из площадок: Encar, KBChachacha или Kcar</p>
@@ -1715,7 +1823,7 @@ a.platform-card {
       <div class="step-card reveal reveal-delay-2">
         <div class="step-number">02</div>
         <div class="step-icon">
-          <img src="icon-link.png" alt="Ссылка" loading="lazy">
+          <img src="icon-link.png" alt="Скопировать ссылку на объявление" loading="lazy" width="32" height="32">
         </div>
         <h3 class="step-title">Скопируй ссылку</h3>
         <p class="step-desc">Скопируй ссылку на объявление и отправь её боту в Telegram</p>
@@ -1726,7 +1834,7 @@ a.platform-card {
       <div class="step-card reveal reveal-delay-3">
         <div class="step-number">03</div>
         <div class="step-icon">
-          <img src="icon-report.png" alt="Отчёт" loading="lazy">
+          <img src="icon-report.png" alt="Полный отчёт по автомобилю из Кореи" loading="lazy" width="32" height="32">
         </div>
         <h3 class="step-title">Получи отчёт</h3>
         <p class="step-desc">Бот мгновенно сформирует полный отчёт на русском языке</p>
