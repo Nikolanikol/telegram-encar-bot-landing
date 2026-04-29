@@ -1293,6 +1293,121 @@ a.platform-card {
   font-size: 14px;
 }
 
+/* ===== REVIEWS ===== */
+.reviews {
+  background: var(--bg-primary);
+  border-top: 1px solid var(--border-color);
+}
+
+.reviews-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.tg-card {
+  background: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  padding: 20px;
+  transition: all var(--transition-base);
+}
+
+.tg-card:hover {
+  border-color: var(--accent-blue);
+  transform: translateY(-2px);
+}
+
+.tg-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.tg-avatar {
+  width: 40px;
+  height: 40px;
+  min-width: 40px;
+  border-radius: 50%;
+  background: var(--accent-blue);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-heading);
+  font-size: 16px;
+  font-weight: 600;
+  color: white;
+}
+
+.tg-avatar.orange { background: var(--accent-orange); }
+.tg-avatar.green { background: var(--success); }
+
+.tg-user {
+  flex: 1;
+}
+
+.tg-name {
+  font-family: var(--font-heading);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.tg-handle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.tg-verified {
+  color: var(--accent-blue);
+}
+
+.tg-bubble {
+  background: var(--bg-tertiary);
+  border-radius: 0 12px 12px 12px;
+  padding: 12px 16px;
+  position: relative;
+  margin-left: 8px;
+}
+
+.tg-bubble::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 0;
+  border: 8px solid transparent;
+  border-top-color: var(--bg-tertiary);
+  border-left: none;
+}
+
+.tg-bubble p {
+  font-size: 14px;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.tg-time {
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: right;
+  margin-top: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.tg-time svg {
+  color: var(--accent-blue);
+}
+
+@media (max-width: 768px) {
+  .reviews-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ===== FAQ ===== */
 .faq {
   background: var(--bg-primary);
@@ -2151,6 +2266,73 @@ a.platform-card {
         <h3 class="platform-name">Kcar.com</h3>
         <p class="platform-desc">Официальная площадка KCar с гарантией пробега и состояния.</p>
       </a>
+    </div>
+  </div>
+</section>
+
+<!-- Reviews Section -->
+<section class="section reviews" id="reviews">
+  <div class="container">
+    <div class="section-header reveal">
+      <h2 class="section-title">Что говорят клиенты</h2>
+      <p class="section-subtitle">Реальные отзывы пользователей Car Analyzer</p>
+    </div>
+    <div class="reviews-grid">
+
+      <div class="tg-card reveal reveal-delay-1">
+        <div class="tg-card-header">
+          <div class="tg-avatar">Д</div>
+          <div class="tg-user">
+            <div class="tg-name">Дмитрий</div>
+            <div class="tg-handle">@dmitriy · <span class="tg-verified">✓ Пользователь</span></div>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#1E88E5"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        </div>
+        <div class="tg-bubble">
+          <p>Отличный сервис! Сэкономил кучу времени при подборе авто. Раньше приходилось вручную искать всю историю — теперь за 10 секунд всё как на ладони 🔥</p>
+          <div class="tg-time">
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M11.071.646a.75.75 0 0 1 1.06 1.06l-6.82 6.821a.75.75 0 0 1-1.06 0L1.47 5.746a.75.75 0 0 1 1.06-1.06l2.25 2.25 6.29-6.29zm2.84 0a.75.75 0 0 1 1.06 1.06l-6.82 6.821a.75.75 0 0 1-1.06 0l-.884-.884a.75.75 0 0 1 1.06-1.06l.354.354 6.29-6.29z"/></svg>
+            19:42
+          </div>
+        </div>
+      </div>
+
+      <div class="tg-card reveal reveal-delay-2">
+        <div class="tg-card-header">
+          <div class="tg-avatar orange">В</div>
+          <div class="tg-user">
+            <div class="tg-name">Влад</div>
+            <div class="tg-handle">@vlad · <span class="tg-verified">✓ Бизнес</span></div>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#1E88E5"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        </div>
+        <div class="tg-bubble">
+          <p>Подключили для нашего агентства — получилось автоматизировать процессы и снять нагрузку с менеджеров. Теперь проверка авто занимает секунды, а не часы 💪</p>
+          <div class="tg-time">
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M11.071.646a.75.75 0 0 1 1.06 1.06l-6.82 6.821a.75.75 0 0 1-1.06 0L1.47 5.746a.75.75 0 0 1 1.06-1.06l2.25 2.25 6.29-6.29zm2.84 0a.75.75 0 0 1 1.06 1.06l-6.82 6.821a.75.75 0 0 1-1.06 0l-.884-.884a.75.75 0 0 1 1.06-1.06l.354.354 6.29-6.29z"/></svg>
+            11:17
+          </div>
+        </div>
+      </div>
+
+      <div class="tg-card reveal reveal-delay-3">
+        <div class="tg-card-header">
+          <div class="tg-avatar green">А</div>
+          <div class="tg-user">
+            <div class="tg-name">Александр</div>
+            <div class="tg-handle">@alex · <span class="tg-verified">✓ Пользователь</span></div>
+          </div>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#1E88E5"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        </div>
+        <div class="tg-bubble">
+          <p>Проверил 5 машин перед покупкой — в трёх нашёл скрытые ДТП которые продавец не указал. Сервис реально спасает от покупки проблемного авто 👍</p>
+          <div class="tg-time">
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M11.071.646a.75.75 0 0 1 1.06 1.06l-6.82 6.821a.75.75 0 0 1-1.06 0L1.47 5.746a.75.75 0 0 1 1.06-1.06l2.25 2.25 6.29-6.29zm2.84 0a.75.75 0 0 1 1.06 1.06l-6.82 6.821a.75.75 0 0 1-1.06 0l-.884-.884a.75.75 0 0 1 1.06-1.06l.354.354 6.29-6.29z"/></svg>
+            09:05
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
